@@ -7,7 +7,7 @@
 
 char mqttServer[] = IP_SERVER;
 WiFiClient wifiClient;
-PubSubClient client(wifiClient);
+PubSubClient mqttClient(wifiClient);
 String data;
 const int CHAR = 48;
 static unsigned long previousMillis = 0;
@@ -17,15 +17,28 @@ unsigned long currentMillis;
 // reconnect
 //
 void callback(char* topic, byte* payload, unsigned int length) {
-#ifdef INFO
-	Serial.print("Message arrived [");
-	Serial.print(topic);
-	Serial.print("] ");
-	for (int i = 0; i < length; i++) {
-		Serial.print((char)payload[i]);
-	}
-	Serial.println();
+#ifdef DEBUG
+	Serial.print("Message: ");
+	Serial.println(topic);
+	Serial.print("Value: ");
+	Serial.println((char*)payload);
 #endif
+	String msg = (char*)payload;
+	int hum = msg.toInt();
+
+	if (hum >= 72) {
+#ifdef DEBUG
+		Serial.println("GPIO0: On");
+#endif
+		digitalWrite(GPIO_0, HIGH);
+	}
+	else
+	{
+#ifdef DEBUG
+		Serial.println("GPIO0: Off");
+#endif#endif
+		digitalWrite(GPIO_0, LOW);
+	}
 }
 
 //
@@ -33,24 +46,24 @@ void callback(char* topic, byte* payload, unsigned int length) {
 //
 void reconnect() {
 	// Connect to MQTT
-	if (!client.connected()) {
+	if (!mqttClient.connected()) {
 #ifdef INFO
 		Serial.println("Attempting MQTT connection...");
 #endif
-		while (!client.connected()) {
+		while (!mqttClient.connected()) {
 #ifdef INFO
 			Serial.print(".");
 #endif
-			client.connect(NETWORKNAME);
+			mqttClient.connect(NETWORKNAME);
 			delay(ATTENPTING);
-		}
+	}
 #ifdef INFO
 		Serial.println("");
 		Serial.println("Connected");
+		mqttClient.subscribe(TOPIC);
 #endif
 	}
 }
-
 
 //
 // setup
@@ -79,9 +92,16 @@ void setup()
 		ESP.reset();
 		delay(5000);
 	}
-	client.setServer(mqttServer, MQTTPORT);
-	client.setCallback(callback);
+
+	//MQTT configuration
+	mqttClient.setServer(mqttServer, MQTTPORT);
+	mqttClient.setCallback(callback);
 	reconnect();
+	mqttClient.subscribe(TOPIC);
+
+	//ESP8266 Configuration
+	pinMode(GPIO_0, OUTPUT);
+	digitalWrite(0, LOW);
 }
 
 //
@@ -94,34 +114,6 @@ void loop()
 	if (currentMillis - previousMillis >= DB_FREQUENCY) {
 		previousMillis = currentMillis;
 	}
-	if (client.connected())
-		client.loop();
-	//code
-}
-
-//
-// sendMQTT
-//
-void sendMQTT(char sensor, String temp, String hum) {
-	// Send payload
-	String strT = "iot:t";
-	String strH = "iot:h";
-	char attributest[100];
-	char attributesh[100];
-	temp.toCharArray(attributest, 100);
-	hum.toCharArray(attributesh, 100);
-	if (client.connected()) {
-#ifdef DEBUG
-		Serial.println("Before send to MQTT broker:");
-		Serial.println(temp);
-		Serial.println(hum);
-		Serial.println(sensor);
-		Serial.println(attributest);
-		Serial.println(attributesh);
-#endif 	
-		strT.concat(sensor);
-		strH.concat(sensor);
-		client.publish(strT.c_str(), attributest);
-		client.publish(strH.c_str(), attributesh);
-	}
+	if (mqttClient.connected())
+		mqttClient.loop();
 }

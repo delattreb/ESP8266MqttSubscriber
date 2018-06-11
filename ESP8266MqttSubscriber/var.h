@@ -1,11 +1,12 @@
 // VAR
 
-#define INFO
+//#define INFO
 #define DEBUG
 
 // Device selection
 #define SERIALBAUDS 9600
-#define NETWORKNAME "ESP Ch Chloe"
+#define NETWORKNAME "ESP Subscriber 1"
+#define TOPIC "iot:h1"
 #define ATTENPTING 10000
 
 #pragma region IPDEFINITION
@@ -25,4 +26,8 @@
 #define MQTTPORT 1883
 #define DB_FREQUENCY 3000
 #define IP_SERVER "mycube.dscloud.me"
+
+//GIO
+#define GPIO_0 0
+#define GPIO_1 1
 
