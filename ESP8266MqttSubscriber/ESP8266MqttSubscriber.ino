@@ -5,13 +5,10 @@
 #include <PubSubClient.h>
 #include "var.h"
 
+//MQTT
 char mqttServer[] = IP_SERVER;
 WiFiClient wifiClient;
 PubSubClient mqttClient(wifiClient);
-String data;
-const int CHAR = 48;
-static unsigned long previousMillis = 0;
-unsigned long currentMillis;
 
 //
 // reconnect
@@ -20,19 +17,25 @@ void callback(char* topic, byte* payload, unsigned int length) {
 #ifdef DEBUG
 	Serial.print("Message: ");
 	Serial.println(topic);
-	Serial.print("Value: ");
-	Serial.println((char*)payload);
+	Serial.print("Length: ");
+	Serial.println(length);
 #endif
-	String msg = (char*)payload;
-	int hum = msg.toInt();
+	String msg = "";
+	for (int i = 0; i < length; i++)
+		msg.concat(char(payload[i]));
+#ifdef DEBUG
+	Serial.print("Value: ");
+	Serial.println(msg);
+#endif
+	int ventilation = msg.toInt();
 
-	if (hum >= 72) {
+	if (ventilation == 1) {
 #ifdef DEBUG
 		Serial.println("GPIO0: On");
 #endif
 		digitalWrite(GPIO_0, HIGH);
 	}
-	else
+	if (ventilation == 0)
 	{
 #ifdef DEBUG
 		Serial.println("GPIO0: Off");
@@ -56,12 +59,12 @@ void reconnect() {
 #endif
 			mqttClient.connect(NETWORKNAME);
 			delay(ATTENPTING);
-	}
+		}
 #ifdef INFO
 		Serial.println("");
 		Serial.println("Connected");
-		mqttClient.subscribe(TOPIC);
 #endif
+		mqttClient.subscribe(TOPIC);
 	}
 }
 
@@ -101,7 +104,7 @@ void setup()
 
 	//ESP8266 Configuration
 	pinMode(GPIO_0, OUTPUT);
-	digitalWrite(0, LOW);
+	digitalWrite(GPIO_0, LOW);
 }
 
 //
@@ -109,11 +112,7 @@ void setup()
 //
 void loop()
 {
-	currentMillis = millis();
 	reconnect();
-	if (currentMillis - previousMillis >= DB_FREQUENCY) {
-		previousMillis = currentMillis;
-	}
 	if (mqttClient.connected())
 		mqttClient.loop();
 }

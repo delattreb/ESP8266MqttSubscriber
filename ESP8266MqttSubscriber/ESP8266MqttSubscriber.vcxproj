@@ -94,7 +94,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM4" />
+      <UserProperties custom_esp8266_generic_FlashSize="1M64" arduino.upload.port="COM4" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
