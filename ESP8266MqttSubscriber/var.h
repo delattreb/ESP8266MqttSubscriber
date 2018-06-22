@@ -1,10 +1,10 @@
 // VAR
-//#define INFO
-//#define DEBUG
+#define INFO
+#define DEBUG
 
 // Device selection
 #define SERIALBAUDS 9600
-#define NETWORKNAME "ESP Subscriber 1"
+#define NETWORKNAME "ESP Extracteur 2"
 #define TOPIC "iot:ventilation"
 #define ATTENPTING 10000
 
@@ -25,6 +25,7 @@
 #define MQTTPORT 1883
 #define IP_SERVER "mycube.dscloud.me"
 
-//GIO
+// GPIO
 #define GPIO_0 0
-#define GPIO_1 1
+#define GPIO_1 2
+
