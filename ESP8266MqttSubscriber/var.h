@@ -5,7 +5,7 @@
 // Device selection
 #define SERIALBAUDS 9600
 #define NETWORKNAME "ESP Extracteur 2"
-#define TOPIC "iot:ventilation"
+#define TOPIC "ventilation"
 #define ATTENPTING 10000
 
 #pragma region IPDEFINITION
