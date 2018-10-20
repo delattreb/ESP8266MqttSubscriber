@@ -1,6 +1,4 @@
 #include <ESP8266WiFi.h>
-#include <DNSServer.h>
-#include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 #include <PubSubClient.h>
 #include "var.h"
@@ -33,14 +31,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
 #ifdef DEBUG
 		Serial.println("GPIO0: On");
 #endif
-		digitalWrite(GPIO_0, LOW);
+		digitalWrite(GPIO_0, HIGH);
 	}
 	if (ventilation == 0)
 	{
 #ifdef DEBUG
 		Serial.println("GPIO0: Off");
 #endif#endif
-		digitalWrite(GPIO_0, HIGH);
+		digitalWrite(GPIO_0, LOW);
 	}
 }
 
@@ -103,10 +101,7 @@ void setup()
 
 	//ESP8266 Configuration
 	pinMode(GPIO_0, OUTPUT);
-	digitalWrite(GPIO_0, HIGH);
-	
-	//TODO: Test sleep for 30s
-	//ESP.deepSleep(30e6);  
+	digitalWrite(GPIO_0, LOW);
 }
 
 //
