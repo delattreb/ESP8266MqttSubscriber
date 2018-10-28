@@ -96,7 +96,9 @@ void setup()
 	wifiManager.setDebugOutput(false);
 	if (!wifiManager.autoConnect(ESP_NAME))
 	{
+#ifdef DEBUG
 		Serial.println("Failed to connect");
+#endif
 		delay(1000);
 		ESP.reset();
 		delay(5000);
