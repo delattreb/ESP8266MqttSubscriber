@@ -1,11 +1,12 @@
 // VAR
 //#define INFO
 //#define DEBUG
+//#define WIFIDEBUG
 
 // Device selection
 #define ESP_NAME "ESP Ventilation 1"
 #define SERIALBAUDS 9600
-#define ATTENPTING 10000
+#define ATTENPTING 2000
 #define JSONBUFFER 100
 #define MESSAGEBUFFER 200
 

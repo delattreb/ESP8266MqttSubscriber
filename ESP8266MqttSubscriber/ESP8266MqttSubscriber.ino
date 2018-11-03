@@ -93,7 +93,11 @@ void setup()
 	//wifiManager.resetSettings();
 
 	wifiManager.setAPStaticIPConfig(IPAddress(IPLOWA, IPLOWB, IPLOWC, IPLOWD), IPAddress(IPHIGHA, IPHIGHB, IPHIGHC, IPHIGHD), IPAddress(255, 255, 255, 0));
+#ifdef WIFIDEBUG
+	wifiManager.setDebugOutput(true);
+#else
 	wifiManager.setDebugOutput(false);
+#endif
 	if (!wifiManager.autoConnect(ESP_NAME))
 	{
 #ifdef DEBUG
