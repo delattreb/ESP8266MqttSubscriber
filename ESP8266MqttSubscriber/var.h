@@ -4,7 +4,7 @@
 //#define WIFIDEBUG
 
 // Device selection
-#define ESP_NAME "ESP Ventilation 2"
+#define ESP_NAME "ESP Ventilation 1"
 #define SERIALBAUDS 9600
 #define ATTENPTING 2000
 #define JSONBUFFER 100

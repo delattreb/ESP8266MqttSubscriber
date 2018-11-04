@@ -38,10 +38,18 @@ void callback(char* topic, byte* payload, unsigned int length) {
 		Serial.print("Value: ");
 		Serial.println(value);
 #endif
-		if (strcmp(value, "0") == 0)
+		if (strcmp(value, "0") == 0) {
+#ifdef DEBUG
+			Serial.println("GPIO set to 0");
+#endif
 			digitalWrite(GPIO_0, HIGH);
-		if (strcmp(value, "1") == 0)
+		}
+		if (strcmp(value, "1") == 0) {
+#ifdef DEBUG
+			Serial.println("GPIO set to 1");
+#endif
 			digitalWrite(GPIO_0, LOW);
+		}
 	}
 }
 
@@ -58,7 +66,7 @@ void reconnect() {
 		while (!mqttClient.connected())
 		{
 #ifdef INFO
-			Serial.print(mqttClient.state());
+			Serial.print(".");
 #endif
 			mqttClient.connect(ESP_NAME, MQTT_USER, MQTT_PWD);
 			delay(ATTENPTING);
