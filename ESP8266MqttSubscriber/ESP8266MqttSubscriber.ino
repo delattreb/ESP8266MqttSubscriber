@@ -60,7 +60,7 @@ void reconnect() {
 #ifdef INFO
 			Serial.print(mqttClient.state());
 #endif
-			mqttClient.connect(ESP_NAME);
+			mqttClient.connect(ESP_NAME, MQTT_USER, MQTT_PWD);
 			delay(ATTENPTING);
 		}
 #ifdef INFO
